@@ -26,9 +26,9 @@ them to return the corresponding integer between [-8192..+8191]
 
 
 EXAMPLES:
-0 should encode to 4000
--8192 should encode to 0000
-8191 should encode to 7F7F
+0 should encode to 4000,
+-8192 should encode to 0000,
+8191 should encode to 7F7F, 
 ETC.
 
 
