@@ -1,1 +1,12 @@
+encode 6111 => 6f5f
+encode 340 => 4254
+encode -2628 => 2b3c
+encode -255 => 3e01
+encode 7550 => 7a7e
 
+
+decode 0a0a => -6902
+decode 0029 => -8151
+decode 3f0f => -113
+decode 4400 => 512
+decode 5e7f => 3967

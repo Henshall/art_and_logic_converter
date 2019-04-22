@@ -26,30 +26,29 @@ class Converter
     }
     // add 8192
     $num = $num + 8192;
-    
     // assign two "bytes" to each of the halves of the binary (since $num will always be 14 binary digets long, we can seperate them into 2 halves)
     $byte1 = $num >> 7;
     $byte2 = $num - ($byte1 << 7);
 
     // convert the "bytes" into a hexadecimal string.
-    $byte1 =  dechex($byte1);
+    $byte1 = dechex($byte1);
     $byte2 = dechex($byte2);
 
-    // convert to string
+    echo strlen($byte1) . "\n";
+    echo strlen($byte2) . "\n";
+
+
+    // convert to string - add missing 0's
     if (strlen($byte1) == 0) {
       $byte1 = "00";
     } elseif (strlen($byte1) == 1) {
       $byte1 = "0" . $byte1;
-    } elseif (strlen($byte1) == 2) {
-
     }
 
     if (strlen($byte2) == 0) {
       $byte2 = "00";
-    } elseif (strlen($byte2) == 1) {
+    } elseif (strlen($byte2) == 1 && $byte2 != 0) {
       $byte2 = "0" . $byte2;
-    } elseif (strlen($byte2) == 2) {
-
     }
 
     // concatenate and return
@@ -59,28 +58,55 @@ class Converter
 
   public static function decode($hi, $lo){
 
-    // convert the hexadecimal strings, into decimal
-    $hi = hexdec($hi);
-    $lo = hexdec($lo);
-
-    // convert decimals into binary
-    $hi = decbin($hi);
-    $lo = decbin($lo);
-
+    // convert the hexadecimal strings, into decimal and then into binary
+    $hi = decbin(hexdec($hi));
+    $lo = decbin(hexdec($lo));
+    // calculate number of "0"s to add
     $times = 7 - (int)strlen(strval($lo));
-
+    // add 0's to lo
     for ($i=0; $i < $times; $i++) {
       $lo = "0" . $lo;
     }
+    // concatenate
     $binary = $hi . $lo;
+    // convert to decimal
     $num = bindec((int)$binary);
+    // subtract 8192 and return
     return $num - 8192;
   }
 
 }
 
-echo "encode returns === " .  Converter::encode(340) . "\n";
-echo "decode returns === " .  Converter::decode("42", "54") . "\n";
+
+// =========================================================================
+// TASK:
+// ENCODE THE FOLLOWIGN NUMBERS:  6111, 340, -2628, -255, 7550
+// DECODE THE FOLLOWIGN STRIGS:  0a0a, 0029, 3f0f, 4400, 5e7f
+// WRITE THE ENCODED / DECODED VALUES TO THE CONVERTEDDATA.TXT FILE.
+// =========================================================================
+
+// create arrays of numbers to encode/decode
+$encode_array = [6111, 340, -2628 , -255, 7550];
+$decode_array = [ ["0a", "0a"], ["00","29"], ["3f","0f"] , ["44","00"], ["5e","7f"]];
+
+// open file
+$fp = fopen('ConvertedData.txt', 'w');
+
+//loop through encode array and print values
+foreach ($encode_array as $arr) {
+  fwrite($fp,   "encode $arr => "   .  Converter::encode($arr)  . "\n"    );
+}
+
+//write spaces to seperate values
+fwrite($fp,"\n");
+fwrite($fp,"\n");
+
+//loop through decode array and print values
+foreach ($decode_array as $arr) {
+  fwrite($fp, "decode $arr[0]$arr[1] => " . Converter::decode($arr[0], $arr[1] ) . "\n");
+}
+//close
+fclose($fp);
 
 
 
