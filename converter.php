@@ -17,7 +17,6 @@
 // 8191 should encode to 7F7F
 // ETC.
 
-
 class Converter
 {
   public static function encode($num){
@@ -27,8 +26,7 @@ class Converter
     }
     // add 8192
     $num = $num + 8192;
-    // get binary
-    $binary = decbin($num);
+    
     // assign two "bytes" to each of the halves of the binary (since $num will always be 14 binary digets long, we can seperate them into 2 halves)
     $byte1 = $num >> 7;
     $byte2 = $num - ($byte1 << 7);
