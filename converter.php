@@ -1,22 +1,5 @@
 <?php
 
-// NOTE ON THE CONVERTER
-
-// This function needs to accept a signed integer in the 14-bit range [-8192..+8191] and return a 4 character
-// string.
-// The encoding process is as follows:
-// 1. Add 8192 to the raw value, so its range is translated to [0..16383]
-// 2. Pack that value into two bytes such that the most significant bit of each is cleared
-// Unencoded intermediate value (as a 16-bit integer):
-//   3. Format the two bytes as a single 4-character hexadecimal string and return it.
-//
-
-// EXAMPLES:
-// 0 should encode to 4000
-// -8192 should encode to 0000
-// 8191 should encode to 7F7F
-// ETC.
-
 class Converter
 {
   public static function encode($num){
@@ -33,10 +16,6 @@ class Converter
     // convert the "bytes" into a hexadecimal string.
     $byte1 = dechex($byte1);
     $byte2 = dechex($byte2);
-
-    echo strlen($byte1) . "\n";
-    echo strlen($byte2) . "\n";
-
 
     // convert to string - add missing 0's
     if (strlen($byte1) == 0) {
@@ -76,39 +55,6 @@ class Converter
   }
 
 }
-
-
-// =========================================================================
-// TASK:
-// ENCODE THE FOLLOWIGN NUMBERS:  6111, 340, -2628, -255, 7550
-// DECODE THE FOLLOWIGN STRIGS:  0a0a, 0029, 3f0f, 4400, 5e7f
-// WRITE THE ENCODED / DECODED VALUES TO THE CONVERTEDDATA.TXT FILE.
-// =========================================================================
-
-// create arrays of numbers to encode/decode
-$encode_array = [6111, 340, -2628 , -255, 7550];
-$decode_array = [ ["0a", "0a"], ["00","29"], ["3f","0f"] , ["44","00"], ["5e","7f"]];
-
-// open file
-$fp = fopen('ConvertedData.txt', 'w');
-
-//loop through encode array and print values
-foreach ($encode_array as $arr) {
-  fwrite($fp,   "encode $arr => "   .  Converter::encode($arr)  . "\n"    );
-}
-
-//write spaces to seperate values
-fwrite($fp,"\n");
-fwrite($fp,"\n");
-
-//loop through decode array and print values
-foreach ($decode_array as $arr) {
-  fwrite($fp, "decode $arr[0]$arr[1] => " . Converter::decode($arr[0], $arr[1] ) . "\n");
-}
-//close
-fclose($fp);
-
-
 
 
  ?>
