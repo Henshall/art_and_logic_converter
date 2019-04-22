@@ -29,10 +29,9 @@ class Converter
     $num = $num + 8192;
     // get binary
     $binary = decbin($num);
-    // echo $binary;
     // assign two "bytes" to each of the halves of the binary (since $num will always be 14 binary digets long, we can seperate them into 2 halves)
     $byte1 = $num >> 7;
-    $byte2 = $binary & $byte1;
+    $byte2 = $num - ($byte1 << 7);
 
     // convert the "bytes" into a hexadecimal string.
     $byte1 =  dechex($byte1);
@@ -66,36 +65,24 @@ class Converter
     $hi = hexdec($hi);
     $lo = hexdec($lo);
 
-    // echo $hi . "\n";
-    // echo $lo . "\n";
-
     // convert decimals into binary
     $hi = decbin($hi);
     $lo = decbin($lo);
 
-    // echo strlen(strval($lo)) . "\n";
-    $times = 7 - (int)strlen(strval($lo)) ;
+    $times = 7 - (int)strlen(strval($lo));
+
     for ($i=0; $i < $times; $i++) {
       $lo = "0" . $lo;
-      // echo " i = " . $i .   " lo = " . $lo . "\n";
     }
-
-    // echo $hi .  "\n";
-    // echo $lo .  "\n";
     $binary = $hi . $lo;
-
-    // echo $binary.  "\n";
-
     $num = bindec((int)$binary);
-
-
     return $num - 8192;
   }
 
 }
 
 echo "encode returns === " .  Converter::encode(340) . "\n";
-echo "decode returns === " .  Converter::decode("0A", "0A") . "\n";
+echo "decode returns === " .  Converter::decode("42", "54") . "\n";
 
 
 
